@@ -1,0 +1,41 @@
+#! /bin/sh
+if [ "$1" = "compile" ]; then
+  if [ $# -eq 1 ]; then
+    echo "Error: Need a file to compile."
+    exit 1
+  fi
+  filename="$(basename "$2" .c)"
+  if [ ! -f "$filename".c ]; then
+    echo "Error: Source file $filename.c is not exist."
+    exit 1
+  fi
+  gcc -Wall -std=c11 -g "$filename.c" -o "$filename"
+elif [ "$1" = "run" ]; then
+  if [ $# -eq 1 ]; then
+    echo "Error: Need a file to run."
+    exit 1
+  fi
+  filename="$(basename "$2" .c)"
+  if [ ! -f "$filename" ]; then
+    echo "Error: cannot open file $filename, which is not exist."
+    exit 1
+  fi
+  ./"$filename"
+elif [ "$1" = "build" ]; then
+  if [ $# -eq 1 ]; then
+    echo "Error: Need a file to build."
+    exit 1
+  fi
+  filename="$(basename "$2" .c)"
+  if [ ! -f "$filename".c ]; then
+    echo "Error: Source file $filename.c is not exist."
+    exit 1
+  fi
+  gcc -Wall -std=c11 -g "$filename.c" -o "$filename" && ./"$filename"
+elif [ $# -eq 0 ] || [ $# -eq 1 ]; then
+  echo "You can use the shell script in some ways:"
+  echo "1 ./b COMMAND to get help (COMMAND is not the run/compile/build)"
+  echo "2 ./b compile/run/build FILE.c/FILE"
+  echo "compile used to compile the .c file. run used to run the program. build used"
+  echo "to compile the .c file and run"
+fi
